@@ -907,6 +907,8 @@ class _ListStrEditor ( Editor ):
     def _set_text_current ( self, index, text, insert = False ):
         """ Sets the text value of the specified list control item.
         """
+		# WxPython GUI text is unicode
+        text = str(text)
         if text.strip() != '':
             object, name, adapter = self.object, self.name, self.adapter
             if insert or self._is_auto_add( index ):

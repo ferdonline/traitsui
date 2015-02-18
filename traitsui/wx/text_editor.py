@@ -102,7 +102,8 @@ class SimpleEditor ( Editor ):
         else:
             control = wx.TextCtrl( parent, -1, self.str_value, style = style )
 
-        wx.EVT_KILL_FOCUS( control, self.update_object )
+        # This event handling is causing serious bug is WxPython30
+        #wx.EVT_KILL_FOCUS( control, self.update_object )
 
         if factory.auto_set:
             wx.EVT_TEXT( parent, control.GetId(), self.update_object )
