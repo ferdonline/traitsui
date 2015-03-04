@@ -178,7 +178,10 @@ class SimpleEditor ( Editor ):
         # Get rid of any previous contents:
         list_pane = self.control
         list_pane.SetSizer( None )
-        list_pane.DestroyChildren()
+        for child in list_pane.GetChildren():
+            while child.GetEventHandler() is not child:
+                 child.PopEventHandler(True)
+            child.Destroy()
 
         # Create all of the list item trait editors:
         trait_handler = self._trait_handler

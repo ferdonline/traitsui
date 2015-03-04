@@ -194,8 +194,11 @@ def convert_bitmap ( image_resource ):
     bitmap = image_bitmap_cache.get( image_resource )
     if (bitmap is None) and (image_resource is not None):
         #try:
+        from wx import LogNull
+        logNull = LogNull() # -> Suppress warnings from the wx library (duh!)
         image_bitmap_cache[ image_resource ] = bitmap = \
             image_resource.create_bitmap()
+        del logNull #->resume normal
         #except:
         #    pass
 
