@@ -29,9 +29,6 @@ import wx
 from colorsys \
     import rgb_to_hls
 
-from numpy \
-    import reshape, fromstring, uint8
-
 from traits.api \
     import HasPrivateTraits, Instance, Int, List, Color, Enum, Bool
 
@@ -241,9 +238,16 @@ class ImageSlice ( HasPrivateTraits ):
 
     #-- Private Methods --------------------------------------------------------
 
+    #Depends on numpy. Imports left inside func so that this heavy dependency is relaxed
     def _analyze_bitmap ( self ):
         """ Analyzes the bitmap.
         """
+        try:
+            from numpy import reshape, fromstring, uint8
+        except ImportError as e:
+            print "Numpy required for Image Slice"
+            raise e
+        
         # Get the image data:
         threshold = self.threshold
         bitmap    = self.opaque_bitmap

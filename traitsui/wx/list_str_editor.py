@@ -169,6 +169,7 @@ class _ListStrEditor ( Editor ):
     # The current search string:
     search = Str
 
+
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
     #  widget:
@@ -178,11 +179,23 @@ class _ListStrEditor ( Editor ):
         """ Finishes initializing the editor by creating the underlying toolkit
             widget.
         """
+        
+        #Needed for some magic in conversions
+        from traits.traits import ConstantTypes, DefaultValues
+
         factory = self.factory
 
         # Set up the adapter to use:
         self.adapter = factory.adapter
         self.sync_value( factory.adapter_name, 'adapter', 'from' )
+
+        #Find type and set default list value
+        t = list(set(map(type, self.value)))
+        self._conversion = lambda x: x
+        if len(t) == 1 and t[0] in ConstantTypes:
+            t=t[0]
+            self.adapter.default_value = DefaultValues[t]
+            self._conversion = lambda x: t(x)
 
         # Determine the style to use for the list control:
         style = wx.LC_REPORT | wx.LC_VIRTUAL
@@ -911,6 +924,12 @@ class _ListStrEditor ( Editor ):
         text = str(text)
         if text.strip() != '':
             object, name, adapter = self.object, self.name, self.adapter
+            try:
+                text = self._conversion(text)
+            except:
+                print "Can't convert", text, "to list elements type"
+                return
+            
             if insert or self._is_auto_add( index ):
                 adapter.insert( object, name, index,
                                 adapter.get_default_value( object, name ) )
