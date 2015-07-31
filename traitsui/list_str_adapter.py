@@ -253,7 +253,7 @@ class ListStrAdapter ( HasPrivateTraits ):
         return self.can_edit
 
     def _get_drag ( self ):
-        return unicode( self.item )
+        return unicode( self.item, "latin-1" )
 
     def _get_can_drop ( self ):
         return isinstance( self.value, basestring )
@@ -280,7 +280,8 @@ class ListStrAdapter ( HasPrivateTraits ):
         return self.item
 
     def _get_text ( self ):
-        return unicode( self.item )
+        return unicode( self.item, "latin-1" )
+        
 
     #-- Private Methods --------------------------------------------------------
 

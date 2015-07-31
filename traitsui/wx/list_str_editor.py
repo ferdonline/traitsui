@@ -67,7 +67,11 @@ class wxListCtrl ( wx.ListCtrl ):
         # manage the reference count for the returned object, and it seems to be
         # gc'ed before they finish using it. So we store an object reference to
         # it to prevent it from going away too soon...
-        self._attr = attr = wx.ListItemAttr()
+        try:
+            #This is raising an error!?
+            self._attr = attr = wx.ListItemAttr()
+        except:
+            return None
         editor     = self._editor
         adapter    = editor.adapter
 
@@ -169,6 +173,7 @@ class _ListStrEditor ( Editor ):
     # The current search string:
     search = Str
 
+    _conversion = Any
 
     #---------------------------------------------------------------------------
     #  Finishes initializing the editor by creating the underlying toolkit
